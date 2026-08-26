@@ -1,7 +1,7 @@
 # API Reference
 
 **Base path:** `/todo/`  
-**Status:** Integrated API through **Feature 1** (authentication and sessions).  
+**Status:** Integrated API through **Feature 2** (authentication, sessions, list CRUD).  
 **Authority for new work:** feature specs in `features/` — update this file in the same PR when routes or payloads change.
 
 **Auth:** Send `Authorization: Bearer <token>` on protected routes.  
@@ -12,7 +12,7 @@
 | Area | Feature |
 |------|---------|
 | Register, login, logout | 1 |
-| Session-gated `GET /todo/lists` (empty array until list persistence) | 1 (Gherkin US-1.3); Feature 2 adds list CRUD |
+| List CRUD (`GET/POST/PUT/DELETE /todo/lists`) | 2 |
 
 ---
 
@@ -69,10 +69,36 @@ Password hashes are never returned.
 
 ---
 
-## Lists (Feature 1 session proof)
+## Lists (Feature 2)
 
 | Method | Path | Auth | Purpose |
 |--------|------|------|---------|
-| `GET` | `/todo/lists` | Yes | Returns lists owned by the caller. Feature 1 returns `[]` (no list persistence yet). |
+| `GET` | `/todo/lists` | Yes | Lists owned by caller (array, ordered by `name` ASC) |
+| `POST` | `/todo/lists` | Yes | Create a new list |
+| `PUT` | `/todo/lists/:listId` | Yes | Rename a list |
+| `DELETE` | `/todo/lists/:listId` | Yes | Delete a list owned by the caller |
 
-Unauthenticated → `401`.
+**Create / rename body:**
+```json
+{ "name": "Groceries" }
+```
+
+Client-supplied `userId` in the body is ignored on create; ownership is always `req.user.id`.
+
+**List success** (`200` / `201`):
+```json
+{
+  "id": 1,
+  "name": "Groceries",
+  "userId": 42,
+  "createdAt": "2026-07-02T12:00:00.000Z",
+  "updatedAt": "2026-07-02T12:00:00.000Z"
+}
+```
+
+**Delete success** (`200`):
+```json
+{ "message": "List deleted successfully." }
+```
+
+**Validation errors:** empty/whitespace name `400` with `"List name is required."`; name > 100 chars `400` with `"List name must be 100 characters or fewer."`; invalid `listId` `400`; unowned list `404` with `"List with id=<id> not found."`; unauthenticated `401`.

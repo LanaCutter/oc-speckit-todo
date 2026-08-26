@@ -1,14 +1,12 @@
 import { Router } from "express";
+import listController from "../controllers/list.controller.js";
 import { authenticate } from "../authorization/authorization.js";
 
 const router = Router();
 
-/**
- * Feature 1 foundation: a protected list read so session scoping can be proven.
- * Feature 2 replaces this with persisted list CRUD.
- */
-router.get("/", [authenticate], (_req, res) => {
-  res.status(200).send([]);
-});
+router.get("/", [authenticate], listController.findAll);
+router.post("/", [authenticate], listController.create);
+router.put("/:listId", [authenticate], listController.update);
+router.delete("/:listId", [authenticate], listController.remove);
 
 export default router;

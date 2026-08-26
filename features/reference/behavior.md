@@ -37,15 +37,35 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | Username normalized `trim().toLowerCase()` on save | User model `beforeValidate` hook | Feature 1 |
 | Shared `emailRules` for registration (required + format `"Enter a valid email address."`) | `frontend/src/config/validation.js` | Feature 1 |
 | Session stored in `localStorage` key `user` | Login/register success | Feature 1 |
-| Auth pages and home placeholder: full-screen layout, **no MenuBar**; **Sign out** on home | Login, Register, Home | Feature 1 |
+| Auth pages: full-screen layout, **no MenuBar** | Login, Register | Feature 1 |
 
 ## Ownership & isolation
 
 | Rule | Enforcement | Introduced |
 |------|-------------|------------|
 | Every authenticated request resolves to `req.user.id` from the session | `authenticate` | Feature 1 |
-| No Feature 1 API returns another user's profile or session | Auth controllers | Feature 1 |
-| `GET /todo/lists` requires a valid session and returns only the caller's lists (`[]` until Feature 2) | `authenticate` + list route | Feature 1 |
+| Cross-user list access → **`404`**, never `403` | `list.controller` + `getAccessibleListOrNull` | Feature 2 |
+| Lists: reads/writes scoped to `userId = req.user.id`; create ownership from server only | `list.controller` + helper | Feature 2 |
+| Client-supplied `userId` on list create is ignored | `list.controller` create | Feature 2 |
+
+## Lists
+
+| Rule | Enforcement | Introduced |
+|------|-------------|------------|
+| List name trimmed; empty/whitespace rejected | Create/update API + Dashboard dialogs | Feature 2 |
+| List name max **100** characters | API + client rules | Feature 2 |
+| Lists returned **alphabetically by name** | `findAll` `order: name ASC` | Feature 2 |
+| Single-view lists UI (`Dashboard.vue`); list CRUD via dialogs; no sidebar/main split | Dashboard | Feature 2 |
+| Empty lists: **"No lists yet. Create your first list."** | Dashboard | Feature 2 |
+| **+ New List** and dialog **Create** use class **`oc-cta`** | Dashboard | Feature 2 |
+| List row icon actions: **Edit list**, **Delete list** (`size="small"`) | Dashboard | Feature 2 |
+
+## MenuBar
+
+| Rule | Enforcement | Introduced |
+|------|-------------|------------|
+| `MenuBar` on signed-in routes; hidden on login/register | `App.vue` | Feature 2 |
+| Shows signed-in user's display name and **Sign out** | `MenuBar.vue` | Feature 2 |
 
 ## Errors (product convention)
 
@@ -54,6 +74,7 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | Error body shape `{ "message": "Human-readable explanation." }` | Controllers | Feature 1 |
 | Duplicate username → `"Username is already taken."`; duplicate email → `"Email is already registered."` | Register API | Feature 1 |
 | Invalid login (wrong username or password) → `"Invalid username or password."` | Login API | Feature 1 |
+| Unowned list → `"List with id=<id> not found."` | List controller | Feature 2 |
 
 ---
 
