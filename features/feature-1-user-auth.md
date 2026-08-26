@@ -2,7 +2,7 @@
 
 **Feature ID:** 1
 **Branch pattern:** `feature/1-user-auth`
-**Status:** Ready
+**Status:** Shipped
 **Created:** 2026-01-15
 **Input:** Multi-user authentication and session management so each user can sign in and access private todo data
 **Related:** [ADR-0001 — Client–server multi-user architecture](../docs/adr/0001-client-server-multi-user-architecture.md), [ADR-0002 — Security architecture](../docs/adr/0002-security-architecture.md)
@@ -344,14 +344,14 @@ Each scenario above must map to at least one automated test.
 
 | Story | Scenario | Test file | Test name |
 |-------|----------|-----------|-----------|
-| US-1.1 | User registers with valid information | `backend/tests/auth.test.js` | `User registers with valid information` |
-| US-1.1 | User submits registration with missing email | `backend/tests/auth.test.js` | `User submits registration with missing email` |
+| US-1.1 | User registers with valid information | `backend/tests/auth.test.js`, `frontend/tests/Register.test.js` | `User registers with valid information` |
+| US-1.1 | User submits registration with missing email | `backend/tests/auth.test.js`, `frontend/tests/Register.test.js` | `User submits registration with missing email` |
 | US-1.1 | User submits registration with invalid email format | `frontend/tests/Register.test.js` | `User submits registration with invalid email format` |
 | US-1.1 | User submits registration with missing username | `frontend/tests/Register.test.js` | `User submits registration with missing username` |
 | US-1.1 | User submits registration with password too short | `backend/tests/auth.test.js`, `frontend/tests/Register.test.js` | `User submits registration with password too short` |
 | US-1.1 | User submits registration with mismatched passwords | `frontend/tests/Register.test.js` | `User submits registration with mismatched passwords` |
-| US-1.1 | User registers with a duplicate username | `backend/tests/auth.test.js` | `User registers with a duplicate username` |
-| US-1.1 | User registers with a duplicate email | `backend/tests/auth.test.js` | `User registers with a duplicate email` |
+| US-1.1 | User registers with a duplicate username | `backend/tests/auth.test.js`, `frontend/tests/Register.test.js` | `User registers with a duplicate username` |
+| US-1.1 | User registers with a duplicate email | `backend/tests/auth.test.js`, `frontend/tests/Register.test.js` | `User registers with a duplicate email` |
 | US-1.2 | User signs in with valid credentials | `backend/tests/auth.test.js` | `User signs in with valid credentials` |
 | US-1.2 | User signs in with invalid password | `backend/tests/auth.test.js`, `frontend/tests/Login.test.js` | `User signs in with invalid password` |
 | US-1.2 | User signs in with missing username | `backend/tests/auth.test.js`, `frontend/tests/Login.test.js` | `User signs in with missing username` |
@@ -385,13 +385,13 @@ Do not implement behavior not in this spec.
 
 ## Definition of Done
 
-*   [ ] Backend and frontend implemented per this spec (**FR-00N** satisfied)
-*   [ ] **Success Criteria (SC-00N)** met
-*   [ ] All mapped tests pass (`npm test`)
-*   [ ] Test Coverage Map complete
-*   [ ] `features/reference/data-model.md` updated (if schema changed)
-*   [ ] `features/reference/api.md` updated (if API changed)
-*   [ ] `features/reference/behavior.md` updated (if product rules changed)
+*   [x] Backend and frontend implemented per this spec (**FR-00N** satisfied)
+*   [x] **Success Criteria (SC-00N)** met
+*   [x] All mapped tests pass (`npm test`)
+*   [x] Test Coverage Map complete
+*   [x] `features/reference/data-model.md` updated (if schema changed)
+*   [x] `features/reference/api.md` updated (if API changed)
+*   [x] `features/reference/behavior.md` updated (if product rules changed)
 
 ---
 
