@@ -51,6 +51,8 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | Todos: reads/writes scoped to `userId = req.user.id`; create ownership from server only | `todo.controller` + helpers | Feature 3 |
 | Client-supplied `userId` on todo create is ignored | `todo.controller` create | Feature 3 |
 | Deleting a list cascades delete of its todos | `List hasMany Todo` `onDelete: CASCADE` | Feature 3 |
+| Cross-user profile access → **`404`**, never `403` | `user.controller` + `getAccessibleUserOrNull` | Feature 4 |
+| Profile: reads/writes scoped to `id = req.user.id` only | `user.controller` + helper | Feature 4 |
 
 ## Lists
 
@@ -79,7 +81,22 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | Rule | Enforcement | Introduced |
 |------|-------------|------------|
 | `MenuBar` on signed-in routes; hidden on login/register | `App.vue` | Feature 2 |
-| Shows signed-in user's display name and **Sign out** | `MenuBar.vue` | Feature 2 |
+| User icon opens profile dropdown (`aria-label`: **Open profile menu**) | `MenuBar.vue` | Feature 4 |
+| Profile dropdown shows full name, username, email; **Edit Profile** and **Log out** | `MenuBar.vue` | Feature 4 |
+| **Edit Profile** uses class **`oc-cta`** | `MenuBar.vue` | Feature 4 |
+| No standalone **Sign out** button on menu bar | `MenuBar.vue` | Feature 4 |
+| **Log out** in profile dropdown uses `authServices.logoutUser()` | `MenuBar.vue` | Feature 4 |
+| Edit Profile dialog: shared `emailRules`; optional password + confirm; pre-fill from `GET /todo/users/:id` | `MenuBar.vue` | Feature 4 |
+| After profile save, `localStorage` key `user` updated and `user-logged-in` dispatched | `MenuBar.vue` | Feature 4 |
+
+## Profile
+
+| Rule | Enforcement | Introduced |
+|------|-------------|------------|
+| Profile fields trimmed; empty required strings rejected | Update API + Edit Profile dialog | Feature 4 |
+| Optional password on update; min **8** characters when provided | Update API + dialog | Feature 4 |
+| Username normalized `trim().toLowerCase()` on save | User model + update API | Feature 4 |
+| `role` read-only in API responses | User model / controller | Feature 4 |
 
 ## Errors (product convention)
 
@@ -90,6 +107,7 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | Invalid login (wrong username or password) → `"Invalid username or password."` | Login API | Feature 1 |
 | Unowned list → `"List with id=<id> not found."` | List controller | Feature 2 |
 | Unowned todo → `"Todo with id=<id> not found."` | Todo controller | Feature 3 |
+| Unowned user → `"User with id=<id> not found."` | User controller | Feature 4 |
 
 ---
 
