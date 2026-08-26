@@ -47,6 +47,10 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | Cross-user list access → **`404`**, never `403` | `list.controller` + `getAccessibleListOrNull` | Feature 2 |
 | Lists: reads/writes scoped to `userId = req.user.id`; create ownership from server only | `list.controller` + helper | Feature 2 |
 | Client-supplied `userId` on list create is ignored | `list.controller` create | Feature 2 |
+| Cross-user todo or parent list access → **`404`**, never `403` | `todo.controller` + `getAccessibleTodoOrNull` | Feature 3 |
+| Todos: reads/writes scoped to `userId = req.user.id`; create ownership from server only | `todo.controller` + helpers | Feature 3 |
+| Client-supplied `userId` on todo create is ignored | `todo.controller` create | Feature 3 |
+| Deleting a list cascades delete of its todos | `List hasMany Todo` `onDelete: CASCADE` | Feature 3 |
 
 ## Lists
 
@@ -59,6 +63,16 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | Empty lists: **"No lists yet. Create your first list."** | Dashboard | Feature 2 |
 | **+ New List** and dialog **Create** use class **`oc-cta`** | Dashboard | Feature 2 |
 | List row icon actions: **Edit list**, **Delete list** (`size="small"`) | Dashboard | Feature 2 |
+| List row **Items** icon opens list-items dialog (`aria-label`: **View items for &lt;list name&gt;**) | Dashboard | Feature 3 |
+| **+ Add Item** only inside list-items dialog; nested add/edit/delete todo dialogs | Dashboard | Feature 3 |
+| Todo title trimmed; empty/whitespace rejected | Create/update API + Dashboard dialogs | Feature 3 |
+| Todo title max **255** characters | API + client rules | Feature 3 |
+| Todos ordered **incomplete first**, then **`createdAt` ASC** | `todo.controller` findAll + client sort | Feature 3 |
+| Completed todos show struck-through or muted title | Dashboard items dialog | Feature 3 |
+| Empty todos: **"No todos in this list yet."** | Dashboard items dialog | Feature 3 |
+| **+ Add Item** and add dialog **Add** use class **`oc-cta`** | Dashboard | Feature 3 |
+| Todo row icon actions: **Edit todo**, **Delete todo** | Dashboard items dialog | Feature 3 |
+| Deleting a list closes its open items dialog | Dashboard | Feature 3 |
 
 ## MenuBar
 
@@ -75,6 +89,7 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | Duplicate username → `"Username is already taken."`; duplicate email → `"Email is already registered."` | Register API | Feature 1 |
 | Invalid login (wrong username or password) → `"Invalid username or password."` | Login API | Feature 1 |
 | Unowned list → `"List with id=<id> not found."` | List controller | Feature 2 |
+| Unowned todo → `"Todo with id=<id> not found."` | Todo controller | Feature 3 |
 
 ---
 

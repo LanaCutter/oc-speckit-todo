@@ -18,7 +18,7 @@ Regenerate writing-guide PDFs: `npm run writing-guides:pdf`
 |----|------|--------|--------|------------|
 | 1 | [feature-1-user-auth.md](./feature-1-user-auth.md) | `feature/1-user-auth` | Shipped | — |
 | 2 | [feature-2-todo-list-management.md](./feature-2-todo-list-management.md) | `feature/2-todo-list-management` | Shipped | Feature 1 |
-| 3 | [feature-3-todo-list-item-management.md](./feature-3-todo-list-item-management.md) | `feature/3-todo-list-item-management` | Ready | Features 1–2 |
+| 3 | [feature-3-todo-list-item-management.md](./feature-3-todo-list-item-management.md) | `feature/3-todo-list-item-management` | Shipped | Features 1–2 |
 | 4 | [feature-4-user-profile-management.md](./feature-4-user-profile-management.md) | `feature/4-user-profile-management` | Ready | Features 1–3 |
 | 5 | [feature-5-todo-due-date.md](./feature-5-todo-due-date.md) | `feature/5-todo-due-date` | Ready | Features 1–3 |
 
