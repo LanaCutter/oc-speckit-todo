@@ -42,8 +42,14 @@ export const createList = async (authHeader, name) => {
   return request(app).post("/todo/lists").set(authHeader).send({ name });
 };
 
-export const createTodo = async (authHeader, listId, title) => {
-  return request(app).post(`/todo/lists/${listId}/todos`).set(authHeader).send({ title });
+export const createTodo = async (authHeader, listId, title, dueDate) => {
+  const payload = { title };
+
+  if (dueDate !== undefined) {
+    payload.dueDate = dueDate;
+  }
+
+  return request(app).post(`/todo/lists/${listId}/todos`).set(authHeader).send(payload);
 };
 
 export const updateProfile = async (authHeader, userId, payload) => {

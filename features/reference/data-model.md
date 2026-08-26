@@ -1,6 +1,6 @@
 # Data Model Reference
 
-**Status:** Integrated schema through **Feature 3** (`users`, `sessions`, `lists`, `todos`).  
+**Status:** Integrated schema through **Feature 5** (`users`, `sessions`, `lists`, `todos`).  
 **Authority for new work:** feature specs in `features/` — update this file in the same PR when schema changes.  
 **Architecture:** [ADR-0003 — MySQL relational database](../../docs/adr/0003-mysql-relational-database.md)
 
@@ -11,6 +11,7 @@
 | `users`, `sessions` | Feature 1 |
 | `lists` | Feature 2 |
 | `todos` | Feature 3 |
+| `todos.dueDate` | Feature 5 |
 
 ---
 
@@ -67,6 +68,7 @@
 | `title` | STRING(255) | Required |
 | `completed` | BOOLEAN | Default `false` |
 | `userId` | INTEGER FK | Required → `users.id`; set from `req.user.id` on create |
+| `dueDate` | DATEONLY | Nullable; optional on create/update; `null` means no due date (Feature 5) |
 | `createdAt` | DATE | Sequelize timestamps |
 | `updatedAt` | DATE | Sequelize timestamps |
 

@@ -75,6 +75,13 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | **+ Add Item** and add dialog **Add** use class **`oc-cta`** | Dashboard | Feature 3 |
 | Todo row icon actions: **Edit todo**, **Delete todo** | Dashboard items dialog | Feature 3 |
 | Deleting a list closes its open items dialog | Dashboard | Feature 3 |
+| Todo `dueDate` optional on create/update; `null` means no due date | `todo.controller` + add/edit dialogs | Feature 5 |
+| Dates are calendar-only: API `YYYY-MM-DD`, database `DATEONLY` | `parseDueDateInput` + `todos.dueDate` | Feature 5 |
+| `dueDate: null` on `PUT` clears it; omitting it leaves the stored value unchanged | `todo.controller` update | Feature 5 |
+| Invalid `dueDate` → `400` `"Due date must be a valid date in YYYY-MM-DD format."` | `parseDueDateInput` | Feature 5 |
+| Due date shown on todo rows, formatted for readability | Dashboard items dialog | Feature 5 |
+| Incomplete todos past `dueDate` (local calendar) styled overdue; completed never are | `isTodoOverdue` in `validation.js` | Feature 5 |
+| Todo sort order unchanged by due dates (incomplete first, then `createdAt` ASC) | `todo.controller` findAll + client sort | Feature 5 |
 
 ## MenuBar
 

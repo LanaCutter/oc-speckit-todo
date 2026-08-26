@@ -1,7 +1,7 @@
 # API Reference
 
 **Base path:** `/todo/`  
-**Status:** Integrated API through **Feature 4** (authentication, sessions, list CRUD, todo CRUD, profile).  
+**Status:** Integrated API through **Feature 5** (authentication, sessions, list CRUD, todo CRUD with due dates, profile).  
 **Authority for new work:** feature specs in `features/` — update this file in the same PR when routes or payloads change.
 
 **Auth:** Send `Authorization: Bearer <token>` on protected routes.  
@@ -15,6 +15,7 @@
 | List CRUD (`GET/POST/PUT/DELETE /todo/lists`) | 2 |
 | Todo CRUD (`GET/POST .../lists/:listId/todos`, `PUT/DELETE /todo/todos/:id`) | 3 |
 | Profile (`GET/PUT /todo/users/:id`) | 4 |
+| Todo `dueDate` on create/update/read | 5 |
 
 ---
 
@@ -120,13 +121,17 @@ Parent list must belong to the caller; cross-user list or todo access returns `4
 
 **Create todo body:**
 ```json
-{ "title": "Buy milk" }
+{ "title": "Buy milk", "dueDate": "2026-07-15" }
 ```
+
+`dueDate` is optional (Feature 5); omit it or send `null` for no due date.
 
 **Update todo body** (at least one field):
 ```json
-{ "title": "Buy oat milk", "completed": true }
+{ "title": "Buy oat milk", "completed": true, "dueDate": "2026-07-20" }
 ```
+
+Omitting `dueDate` leaves the stored value unchanged; sending `null` clears it.
 
 **Todo success** (`200` / `201`):
 ```json
@@ -135,18 +140,21 @@ Parent list must belong to the caller; cross-user list or todo access returns `4
   "listId": 1,
   "title": "Buy milk",
   "completed": false,
+  "dueDate": "2026-07-15",
   "userId": 42,
   "createdAt": "2026-07-02T12:05:00.000Z",
   "updatedAt": "2026-07-02T12:05:00.000Z"
 }
 ```
 
+`dueDate` is `null` when not set.
+
 **Delete success** (`200`):
 ```json
 { "message": "Todo deleted successfully." }
 ```
 
-**Validation errors:** empty/whitespace title `400` with `"Todo title is required."`; title > 255 chars `400` with `"Todo title must be 255 characters or fewer."`; invalid `listId` or `id` `400`; unowned list or todo `404` with `"List with id=<id> not found."` or `"Todo with id=<id> not found."`; unauthenticated `401`.
+**Validation errors:** empty/whitespace title `400` with `"Todo title is required."`; title > 255 chars `400` with `"Todo title must be 255 characters or fewer."`; invalid `dueDate` `400` with `"Due date must be a valid date in YYYY-MM-DD format."`; invalid `listId` or `id` `400`; unowned list or todo `404` with `"List with id=<id> not found."` or `"Todo with id=<id> not found."`; unauthenticated `401`.
 
 ---
 

@@ -1,5 +1,6 @@
 import db from "../models/index.js";
 import logger from "../config/logger.js";
+import { parseDueDateInput } from "../utils/dueDate.js";
 import {
   getAccessibleListOrNull,
   getAccessibleTodoOrNull,
@@ -46,7 +47,7 @@ exports.create = async (req, res) => {
       return res.status(404).send({ message: `List with id=${listId} not found.` });
     }
 
-    const { title } = req.body;
+    const { title, dueDate } = req.body;
 
     if (!title?.trim()) {
       return res.status(400).send({ message: "Todo title is required." });
@@ -57,11 +58,17 @@ exports.create = async (req, res) => {
       return res.status(400).send({ message: "Todo title must be 255 characters or fewer." });
     }
 
+    const parsedDueDate = parseDueDateInput(dueDate);
+    if (parsedDueDate.error) {
+      return res.status(400).send({ message: parsedDueDate.error });
+    }
+
     const todo = await db.todo.create({
       listId: list.id,
       title: trimmedTitle,
       completed: false,
       userId: req.user.id,
+      dueDate: parsedDueDate.provided ? parsedDueDate.value : null,
     });
 
     return res.status(201).send(todo);
@@ -83,7 +90,7 @@ exports.update = async (req, res) => {
       return res.status(404).send({ message: `Todo with id=${todoId} not found.` });
     }
 
-    const { title, completed } = req.body;
+    const { title, completed, dueDate } = req.body;
 
     if (title !== undefined) {
       if (!title?.trim()) {
@@ -100,6 +107,15 @@ exports.update = async (req, res) => {
 
     if (completed !== undefined) {
       todo.completed = Boolean(completed);
+    }
+
+    if (dueDate !== undefined) {
+      const parsedDueDate = parseDueDateInput(dueDate);
+      if (parsedDueDate.error) {
+        return res.status(400).send({ message: parsedDueDate.error });
+      }
+
+      todo.dueDate = parsedDueDate.value;
     }
 
     await todo.save();

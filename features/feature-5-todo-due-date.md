@@ -2,7 +2,7 @@
 
 **Feature ID:** 5
 **Branch pattern:** `feature/5-todo-due-date`
-**Status:** Ready
+**Status:** Shipped
 **Created:** 2026-03-15
 **Input:** Optional calendar due dates on todos with display and overdue highlighting
 **Depends on:** [Feature 1 — User Authentication](feature-1-user-auth.md), [Feature 2 — Todo List Management](feature-2-todo-list-management.md), [Feature 3 — Todo List Item Management](feature-3-todo-list-item-management.md)
@@ -317,13 +317,13 @@ Do not implement behavior not in this spec.
 
 ## Definition of Done
 
-*   [ ] Backend and frontend implemented per this spec (**FR-00N** satisfied)
-*   [ ] **Success Criteria (SC-00N)** met
-*   [ ] All mapped tests pass (`npm test`)
-*   [ ] Test Coverage Map complete
-*   [ ] `features/reference/data-model.md` updated
-*   [ ] `features/reference/api.md` updated
-*   [ ] `features/reference/behavior.md` updated (if product rules changed)
+*   [x] Backend and frontend implemented per this spec (**FR-00N** satisfied)
+*   [x] **Success Criteria (SC-00N)** met
+*   [x] All mapped tests pass (`npm test`)
+*   [x] Test Coverage Map complete
+*   [x] `features/reference/data-model.md` updated
+*   [x] `features/reference/api.md` updated
+*   [x] `features/reference/behavior.md` updated (if product rules changed)
 
 ---
 
